@@ -11,25 +11,26 @@ import java.io.*;
  */
 public class GameOver extends JDialog implements ActionListener{
     private JLabel message;
-    private JButton ok;
-    private int score,record;
-    public GameOver(int score,int record) {
+    private JButton ok,no;
+    private ScorePanel scorePanel;
+    private Map map;
+    public GameOver(ScorePanel scorePanel,Map map) {
+        this.scorePanel=scorePanel;
+        this.map=map;
         setTitle("Game Over");
         setSize(300,150);
         setModal(true);
         setLayout(new FlowLayout());
-        this.score=score;
-        this.record=record ;
-        if(score>record) {
-            message = new JLabel("Game Over. New High Score: " + Integer.toString(score) + "! Play again?");
+        if(scorePanel.getScore()>scorePanel.getRecord()) {
+            message = new JLabel("Game Over. New High Score: " + Integer.toString(scorePanel.getScore()) + "! Play again?");
             try {
                 PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter("record.txt")));
-                printWriter.print(score);
+                printWriter.print(scorePanel.getScore());
                 printWriter.close();
             }catch (IOException e){}
         }
         else {
-            message = new JLabel("Game Over :( Your score: " + Integer.toString(score) + " Play again?");
+            message = new JLabel("Game Over :( Your score: " + Integer.toString(scorePanel.getScore()) + " Play again?");
         }
         add(message);
         addWindowListener(new WindowAdapter() {
@@ -42,9 +43,21 @@ public class GameOver extends JDialog implements ActionListener{
         ok=new JButton("OK");
         ok.addActionListener(this);
         add(ok);
+
+        no=new JButton("NO");
+        no.addActionListener(this);
+        add(no);
     }
     public void actionPerformed(ActionEvent ae){
         if(ae.getActionCommand()=="OK"){
+            if(scorePanel.getScore()>scorePanel.getRecord())
+                scorePanel.setRecord(scorePanel.getScore());
+            scorePanel.setScore(0);
+            map.clear();
+            map.addNext();
+            this.hide();
+        }
+        else{
             System.exit(0);
         }
     }

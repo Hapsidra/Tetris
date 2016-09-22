@@ -8,12 +8,12 @@ import java.awt.event.ActionListener;
  */
 
 public class Main implements ActionListener {
-    private JFrame jFrame;
-    private Map map;
-    private InfoPanel infoPanel;
     private ScorePanel scorePanel;
+    private InfoPanel infoPanel;
+    private Map map;
+    private GameOver gameOver=null;
     public Main(){
-        jFrame =new JFrame("Tetris");
+        JFrame jFrame =new JFrame("Tetris");
         jFrame.setSize(350,600);
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,7 +23,10 @@ public class Main implements ActionListener {
         JMenu menuFile=new JMenu("File");
         jMenuBar.add(menuFile);
         JMenuItem menuFileExit=new JMenuItem("Exit");
+        JMenuItem menuItemRestart=new JMenuItem("Restart");
+        menuFile.add(menuItemRestart);
         menuFile.add(menuFileExit);
+        menuItemRestart.addActionListener(this);
         menuFileExit.addActionListener(this);
         jFrame.setJMenuBar(jMenuBar);
         //////////////////////
@@ -39,7 +42,7 @@ public class Main implements ActionListener {
         //////////////////////////////////
 
         ////Карта///////////
-        map=new Map(scorePanel,infoPanel);
+        map=new Map(scorePanel,infoPanel,this);
         jFrame.add(map);
         map.repaint();
         map.setFocusable(true);
@@ -47,8 +50,18 @@ public class Main implements ActionListener {
         jFrame.setVisible(true);
     }
     public void actionPerformed(ActionEvent e) {
-        if(e.getActionCommand()=="Exit")
+        if(e.getActionCommand().equals("Exit"))
             System.exit(0);
+        else if(e.getActionCommand().equals("Restart")){
+            scorePanel.setScore(0);
+            map.clear();
+            map.addNext();
+        }
+    }
+    public void gameOver(){
+        if(gameOver==null)
+            gameOver=new GameOver(scorePanel,map);
+        gameOver.show();
     }
     public static void main(String args[]){
         SwingUtilities.invokeLater(new Runnable() {
@@ -58,6 +71,4 @@ public class Main implements ActionListener {
             }
         });
     }
-
-
 }
