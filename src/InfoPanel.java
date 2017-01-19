@@ -33,24 +33,24 @@ public class InfoPanel extends JPanel {
     }
     public void updateNext(int n){
         if (n == Figure.O) {
-            labelNext.setIcon(new ImageIcon("o.png"));
+            labelNext.setIcon(new ImageIcon("img/o.png"));
         } else if (n == Figure.I) {
-            labelNext.setIcon(new ImageIcon("i.png"));
+            labelNext.setIcon(new ImageIcon("img/i.png"));
         }
         else if (n == Figure.LR) {
-            labelNext.setIcon(new ImageIcon("lr.png"));
+            labelNext.setIcon(new ImageIcon("img/lr.png"));
         }
         else if (n == Figure.LL) {
-            labelNext.setIcon(new ImageIcon("ll.png"));
+            labelNext.setIcon(new ImageIcon("img/ll.png"));
         }
         else if (n == Figure.T) {
-            labelNext.setIcon(new ImageIcon("t.png"));
+            labelNext.setIcon(new ImageIcon("img/t.png"));
         }
         else if (n == Figure.SL) {
-            labelNext.setIcon(new ImageIcon("sl.png"));
+            labelNext.setIcon(new ImageIcon("img/sl.png"));
         }
         else if (n == Figure.SR) {
-            labelNext.setIcon(new ImageIcon("sr.png"));
+            labelNext.setIcon(new ImageIcon("img/sr.png"));
         }
     }
     public int getLevel(){
