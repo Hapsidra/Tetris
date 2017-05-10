@@ -1,6 +1,4 @@
 import java.awt.*;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by hapsi on 13.06.2016.
@@ -18,7 +16,7 @@ public class Figure0 extends Figure{
         cubes[3]=new Cube(mapUnits,i+1,j+1,color);
     }
     public void moveLeft(){
-        if(j>0 && !mapUnits[i][j-1].getState()&& !mapUnits[i+1][j-1].getState()) {
+        if(j>0 && !mapUnits[i][j-1].isFilled()&& !mapUnits[i+1][j-1].isFilled()) {
             cubes[0].moveLeft();
             cubes[1].moveLeft();
             cubes[2].moveLeft();
@@ -27,7 +25,7 @@ public class Figure0 extends Figure{
         }
     }
     public void moveRight(){
-        if(j<Map.M-width&& !mapUnits[i][j+width].getState()&& !mapUnits[i+1][j+width].getState()) {
+        if(j<Map.M-width&& !mapUnits[i][j+width].isFilled()&& !mapUnits[i+1][j+width].isFilled()) {
             cubes[1].moveRight();
             cubes[0].moveRight();
             cubes[3].moveRight();
@@ -36,7 +34,7 @@ public class Figure0 extends Figure{
         }
     }
     public void moveDown(){
-        if(i!=Map.N-height && !mapUnits[i+height][j].getState()&& !mapUnits[i+height][j+1].getState())
+        if(i!=Map.N-height && !mapUnits[i+height][j].isFilled()&& !mapUnits[i+height][j+1].isFilled())
         {
             i++;
             cubes[2].moveDown();

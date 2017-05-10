@@ -13,36 +13,36 @@ public class Cube {
         this.j = j;
         this.color=color;
         mapUnits[i][j].setColor(color);
-        mapUnits[i][j].setState(true);
+        mapUnits[i][j].setFilled(true);
     }
 
     public void moveLeft() {
-        mapUnits[i][j].setState(false);
+        mapUnits[i][j].setFilled(false);
         j--;
         mapUnits[i][j].setColor(color);
-        mapUnits[i][j].setState(true);
+        mapUnits[i][j].setFilled(true);
     }
 
     public void moveDown() {
-        mapUnits[i][j].setState(false);
+        mapUnits[i][j].setFilled(false);
         i++;
         mapUnits[i][j].setColor(color);
-        mapUnits[i][j].setState(true);
+        mapUnits[i][j].setFilled(true);
     }
 
     public void moveRight() {
-        mapUnits[i][j].setState(false);
+        mapUnits[i][j].setFilled(false);
         j++;
         mapUnits[i][j].setColor(color);
-        mapUnits[i][j].setState(true);
+        mapUnits[i][j].setFilled(true);
     }
     public void moveToIJ(int i, int j){
         if(!(this.i==i && this.j==j)) {
-            mapUnits[this.i][this.j].setState(false);
+            mapUnits[this.i][this.j].setFilled(false);
             this.i = i;
             this.j = j;
             mapUnits[i][j].setColor(color);
-            mapUnits[i][j].setState(true);
+            mapUnits[i][j].setFilled(true);
         }
     }
 }

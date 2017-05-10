@@ -9,30 +9,30 @@ import java.io.*;
 /**
  * Created by hapsi on 13.06.2016.
  */
-public class GameOver extends JDialog implements ActionListener{
-    private JLabel message;
-    private JButton ok,no;
+public class GameOverDialog extends JDialog implements ActionListener{
+    private JLabel messageLabel;
+    private JButton okButton, noButton;
     private ScorePanel scorePanel;
     private Map map;
-    public GameOver(ScorePanel scorePanel,Map map) {
+    public GameOverDialog(ScorePanel scorePanel, Map map) {
         this.scorePanel=scorePanel;
         this.map=map;
         setTitle("Game Over");
         setSize(300,150);
         setModal(true);
         setLayout(new FlowLayout());
-        if(scorePanel.getScore()>scorePanel.getRecord()) {
-            message = new JLabel("Game Over. New High Score: " + Integer.toString(scorePanel.getScore()) + "! Play again?");
+        if(scorePanel.getScore()>scorePanel.getHighScore()) {
+            messageLabel = new JLabel("Game Over. New High Score: " + Integer.toString(scorePanel.getScore()) + "! Play again?");
             try {
-                PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter("record.txt")));
+                PrintWriter printWriter = new PrintWriter(new File("data.txt"));
                 printWriter.print(scorePanel.getScore());
                 printWriter.close();
             }catch (IOException e){}
         }
         else {
-            message = new JLabel("Game Over :( Your score: " + Integer.toString(scorePanel.getScore()) + " Play again?");
+            messageLabel = new JLabel("Game Over :( Your score: " + Integer.toString(scorePanel.getScore()) + " Play again?");
         }
-        add(message);
+        add(messageLabel);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -40,18 +40,18 @@ public class GameOver extends JDialog implements ActionListener{
                 System.exit(0);
             }
         });
-        ok=new JButton("OK");
-        ok.addActionListener(this);
-        add(ok);
+        okButton=new JButton("OK");
+        okButton.addActionListener(this);
+        add(okButton);
 
-        no=new JButton("NO");
-        no.addActionListener(this);
-        add(no);
+        noButton =new JButton("No");
+        noButton.addActionListener(this);
+        add(noButton);
     }
     public void actionPerformed(ActionEvent ae){
-        if(ae.getActionCommand()=="OK"){
-            if(scorePanel.getScore()>scorePanel.getRecord())
-                scorePanel.setRecord(scorePanel.getScore());
+        if(ae.getActionCommand().equals("OK")){
+            if(scorePanel.getScore()>scorePanel.getHighScore())
+                scorePanel.setHighScore(scorePanel.getScore());
             scorePanel.setScore(0);
             map.clear();
             map.addNext();

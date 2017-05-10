@@ -1,8 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Scanner;
 
 /**
@@ -11,33 +10,33 @@ import java.util.Scanner;
 
 public class ScorePanel extends JPanel{
     private JLabel labelScore,labelRecord;
-    private int intScore,intRecord;
+    private int score, highScore;
     public ScorePanel(){
         setLayout(new BorderLayout());
         try {
-            Scanner scanner = new Scanner(new BufferedReader(new FileReader("record.txt")));
-            intRecord=scanner.nextInt();
+            Scanner scanner = new Scanner(new File("data.txt"));
+            highScore =scanner.nextInt();
             scanner.close();
-        }catch (FileNotFoundException e){
-        }
-        intScore=0;
+        }catch (FileNotFoundException e){}
+
+        score = 0;
         labelScore=new JLabel("Score: 0");
         add(labelScore, BorderLayout.WEST);
-        labelRecord=new JLabel("Record: "+Integer.toString(intRecord));
+        labelRecord=new JLabel("High score: "+Integer.toString(highScore));
         add(labelRecord, BorderLayout.EAST);
     }
     public void setScore(int score){
-        intScore=score;
+        this.score =score;
         labelScore.setText("Score: "+Integer.toString(score));
     }
-    public void setRecord(int record){
-        intRecord=record;
-        labelRecord.setText("Record: "+Integer.toString(record));
+    public void setHighScore(int hs){
+        highScore =hs;
+        labelRecord.setText("High score: "+Integer.toString(hs));
     }
     public int getScore(){
-        return intScore;
+        return score;
     }
-    public int getRecord(){
-        return intRecord;
+    public int getHighScore(){
+        return highScore;
     }
 }

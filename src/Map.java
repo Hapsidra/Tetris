@@ -1,7 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -9,19 +12,18 @@ import java.util.Random;
  */
 public class Map extends JPanel {
     public static final int N = 20, M = 10;
-    private MapUnit mapUnits[][];
+    private MapUnit mapUnits[][]= new MapUnit[N][M];
     private Figure figure;
     private int nextFigure;
     private ScorePanel scorePanel;
-    private InfoPanel infoPanel;
+    private StatusPanel infoPanel;
     private Random random;
     private Main main;
-    public Map(ScorePanel scorePanel, InfoPanel infoPanel,Main main) {
+    public Map(ScorePanel scorePanel, StatusPanel infoPanel, Main main) {
         this.scorePanel = scorePanel;
         this.infoPanel = infoPanel;
         this.main=main;
         setLayout(new GridLayout(N, M));
-        mapUnits = new MapUnit[N][M];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 mapUnits[i][j] = new MapUnit();
@@ -49,36 +51,33 @@ public class Map extends JPanel {
         addNext();
     }
 
-    public void addNext() {
-        int k=checkMap();
-        if(k==1)
-            scorePanel.setScore(scorePanel.getScore()+100);
-        else if(k==2)
-            scorePanel.setScore(scorePanel.getScore()+300);
-        else if(k==3)
-            scorePanel.setScore(scorePanel.getScore()+700);
-        else if(k==4)
-            scorePanel.setScore(scorePanel.getScore()+1500);
+    public int computeScore(int droppedCount){
+        if(droppedCount==0)
+            return 0;
+        return computeScore(droppedCount-1)*2+100;
+    }
 
+    public void addNext() {
+        scorePanel.setScore(scorePanel.getScore()+computeScore(dropLines()));
 
         int figureStartI=0,figureStartJ=4;
         if (nextFigure == Figure.O) {
-            if(mapUnits[figureStartI][figureStartJ].getState()||mapUnits[figureStartI][figureStartJ+1].getState()||mapUnits[figureStartI+1][figureStartJ].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()){
+            if(mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()){
                 main.gameOver();
             }
             else
                 figure = new Figure0(this,mapUnits, infoPanel.getLevel());
         } else if (nextFigure == Figure.I) {
             boolean orient = random.nextBoolean();
-            if (orient == true) {
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI + 1][figureStartJ].getState() || mapUnits[figureStartI + 2][figureStartJ].getState() || mapUnits[figureStartI + 3][figureStartJ].getState()) {
+            if (orient) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 2][figureStartJ].isFilled() || mapUnits[figureStartI + 3][figureStartJ].isFilled()) {
                     main.gameOver();
                 }
                 else
                     figure = new FigureI(this,mapUnits, orient, infoPanel.getLevel());
             } else {
                 figureStartJ = 3;
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI][figureStartJ + 1].getState() || mapUnits[figureStartI][figureStartJ + 2].getState() || mapUnits[figureStartI][figureStartJ + 3].getState()) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI][figureStartJ + 3].isFilled()) {
                     main.gameOver();
                 }
                 else
@@ -90,25 +89,25 @@ public class Map extends JPanel {
 
             //Проверка на умещаемость
             if (orient == 0) {
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI][figureStartJ + 1].getState() || mapUnits[figureStartI + 1][figureStartJ].getState() || mapUnits[figureStartI + 2][figureStartJ].getState()) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 2][figureStartJ].isFilled()) {
                     main.gameOver();
                 }
                 else
                     figure = new FigureLR(this,mapUnits, orient, infoPanel.getLevel());
             } else if (orient == 1) {
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI][figureStartJ + 1].getState() || mapUnits[figureStartI][figureStartJ + 2].getState() || mapUnits[figureStartI + 1][figureStartJ + 2].getState()) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 2].isFilled()) {
                     main.gameOver();
                 }
                 else
                     figure = new FigureLR(this,mapUnits, orient, infoPanel.getLevel());
             } else if (orient == 2) {
-                if (mapUnits[figureStartI][figureStartJ + 1].getState() || mapUnits[figureStartI + 1][figureStartJ + 1].getState() || mapUnits[figureStartI + 2][figureStartJ].getState() || mapUnits[figureStartI + 2][figureStartJ + 1].getState()) {
+                if (mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 2][figureStartJ].isFilled() || mapUnits[figureStartI + 2][figureStartJ + 1].isFilled()) {
                     main.gameOver();
                 }
                 else
                     figure = new FigureLR(this,mapUnits, orient, infoPanel.getLevel());
             } else if (orient == 3) {
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI + 1][figureStartJ].getState() || mapUnits[figureStartI + 1][figureStartJ + 1].getState() || mapUnits[figureStartI + 1][figureStartJ + 2].getState()) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 2].isFilled()) {
                     main.gameOver();
                 }
                 else
@@ -121,25 +120,25 @@ public class Map extends JPanel {
             int  orient = random.nextInt(4);
             //Проверка на умещаемость
             if (orient == 0) {
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI][figureStartJ + 1].getState() || mapUnits[figureStartI + 1][figureStartJ + 1].getState() || mapUnits[figureStartI + 2][figureStartJ + 1].getState()) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 2][figureStartJ + 1].isFilled()) {
                     main.gameOver();
                 }
                 else
                     figure = new FigureLL(this,mapUnits, orient, infoPanel.getLevel());
             } else if (orient == 1) {
-                if (mapUnits[figureStartI][figureStartJ + 2].getState() || mapUnits[figureStartI + 1][figureStartJ].getState() || mapUnits[figureStartI + 1][figureStartJ + 1].getState() || mapUnits[figureStartI + 1][figureStartJ + 2].getState()) {
+                if (mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 2].isFilled()) {
                     main.gameOver();
                 }
                 else
                     figure = new FigureLL(this,mapUnits, orient, infoPanel.getLevel());
             } else if (orient == 2) {
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI][figureStartJ + 1].getState() || mapUnits[figureStartI][figureStartJ + 2].getState() || mapUnits[figureStartI][figureStartJ + 3].getState()) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI][figureStartJ + 3].isFilled()) {
                     main.gameOver();
                 }
                 else
                     figure = new FigureLL(this,mapUnits, orient, infoPanel.getLevel());
             } else if (orient == 3) {
-                if (mapUnits[figureStartI][figureStartJ].getState() || mapUnits[figureStartI][figureStartJ + 1].getState() || mapUnits[figureStartI][figureStartJ + 2].getState() || mapUnits[figureStartI + 1][figureStartJ].getState()) {
+                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled()) {
                     main.gameOver();
                 }
                 else
@@ -153,28 +152,28 @@ public class Map extends JPanel {
 
             //Проверка на умещаемость
             if(orient==0) {
-                if(mapUnits[figureStartI+1][figureStartJ].getState()||mapUnits[figureStartI][figureStartJ+1].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()||mapUnits[figureStartI+2][figureStartJ+1].getState()){
+                if(mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+2][figureStartJ+1].isFilled()){
                     main.gameOver();
                 }
                 else
                     figure = new FigureT(this,mapUnits, orient, infoPanel.getLevel());
             }
             else if(orient ==1){
-                if(mapUnits[figureStartI][figureStartJ+1].getState()||mapUnits[figureStartI+1][figureStartJ].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()||mapUnits[figureStartI+1][figureStartJ+2].getState()){
+                if(mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+2].isFilled()){
                     main.gameOver();
                 }
                 else
                     figure = new FigureT(this,mapUnits, orient, infoPanel.getLevel());
             }
             else if(orient ==2){
-                if(mapUnits[figureStartI][figureStartJ].getState()||mapUnits[figureStartI+1][figureStartJ].getState()||mapUnits[figureStartI+2][figureStartJ].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()){
+                if(mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+2][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()){
                     main.gameOver();
                 }
                 else
                     figure = new FigureT(this,mapUnits, orient, infoPanel.getLevel());
             }
             else if(orient ==3){
-                if(mapUnits[figureStartI][figureStartJ].getState()||mapUnits[figureStartI][figureStartJ+1].getState()||mapUnits[figureStartI][figureStartJ+2].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()){
+                if(mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI][figureStartJ+2].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()){
                     main.gameOver();
                 }
                 else
@@ -188,14 +187,14 @@ public class Map extends JPanel {
 
             ////Проверка на умещаемость
             if(orient==0) {
-                if(mapUnits[figureStartI+1][figureStartJ].getState()||mapUnits[figureStartI][figureStartJ+1].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()||mapUnits[figureStartI+2][figureStartJ].getState()){
+                if(mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+2][figureStartJ].isFilled()){
                     main.gameOver();
                 }
                 else
                     figure = new FigureSL(this,mapUnits, orient, infoPanel.getLevel());
             }
             else if(orient ==1){
-                if(mapUnits[figureStartI][figureStartJ+1].getState()||mapUnits[figureStartI][figureStartJ].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()||mapUnits[figureStartI+1][figureStartJ+2].getState()){
+                if(mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+2].isFilled()){
                     main.gameOver();
                 }
                 else
@@ -209,14 +208,14 @@ public class Map extends JPanel {
 
             ////Проверка на умещаемость
             if(orient==0) {
-                if(mapUnits[figureStartI+1][figureStartJ].getState()||mapUnits[figureStartI][figureStartJ].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()||mapUnits[figureStartI+2][figureStartJ+1].getState()){
+                if(mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+2][figureStartJ+1].isFilled()){
                     main.gameOver();
                 }
                 else
                     figure = new FigureSR(this,mapUnits, orient, infoPanel.getLevel());
             }
             else if(orient ==1){
-                if(mapUnits[figureStartI][figureStartJ+1].getState()||mapUnits[figureStartI+1][figureStartJ].getState()||mapUnits[figureStartI+1][figureStartJ+1].getState()||mapUnits[figureStartI][figureStartJ+2].getState()){
+                if(mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI][figureStartJ+2].isFilled()){
                     main.gameOver();
                 }
                 else
@@ -228,84 +227,43 @@ public class Map extends JPanel {
         nextFigure = random.nextInt(Figure.FIGURES_COUNT);
         infoPanel.updateNext(nextFigure);
     }
-    public int checkMap() {
-        int k = 0;
-        int indexs[] = new int[4];
-        for (int i = N - 1; i >= 0; i--) {
-            boolean flag = true;
-            for (int j = 0; j < M; j++) {
-                if (!mapUnits[i][j].getState()) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) {
-                indexs[k] = i;
-                k++;
-            }
-        }
-        //////////////Удалить улаленные////////
-        for (int i = 0; i < k; i++) {
-            for (int j = 0; j < M; j++)
-                mapUnits[indexs[i]][j].setState(false);
-        }
-        ///////////////////////////////////////
-        if (k > 0) {
-            ////////Вычисляем верхушку
-            int up = -1;
-            for (int i = 0; i < N; i++) {
-                boolean exit=false;
-                for (int j = 0; j < M; j++) {
-                    if (mapUnits[i][j].getState()) {
-                        exit=true;
-                        break;
-                    }
-                }
-                if(exit){
-                    up=i;
-                    break;
-                }
-            }
-            if(up==-1)
-                return k;
-            ///////////////////////
 
-            int i=N-1;
-            while(i>up){
-                boolean empty=true;
-                for(int j=0;j<M;j++){
-                    if(mapUnits[i][j].getState())
-                    {
-                        empty=false;
-                        break;
-                    }
+    //Функция убирает заполненные строки и возвращает кол-во убранных строк
+    private int dropLines() {
+        int droppedCount=0;
+        for (int i = 0; i < N; i++) {
+            //Проверяем заполнена ли строка
+            boolean needDrop = true;
+            for (int j = 0; j < M; j++) {
+                if (!mapUnits[i][j].isFilled()) {
+                    needDrop = false;
+                    break;
                 }
-                if(empty){
-                    for(int t=i;t>up;t--){
-                        for(int j=0;j<M;j++) {
-                            if (mapUnits[t-1][j].getState() &&!mapUnits[t][j].getState()) {
-                                mapUnits[t][j].setColor(mapUnits[t-1][j].getColor());
-                                mapUnits[t][j].setState(true);
-                                mapUnits[t-1][j].setState(false);
-                            }
+            }
+            if (needDrop) {
+                //Удаляем строку и сдвигаем все вниз
+                droppedCount++;
+                for (int j = 0; j < M; j++) {
+                    for (int drop = i; drop >= 0; drop--) {
+                        if (drop == 0) {
+                            mapUnits[drop][j].setFilled(false);
+                        } else {
+                            mapUnits[drop][j].setFilled(mapUnits[drop-1][j].isFilled());
+                            mapUnits[drop][j].setColor(mapUnits[drop-1][j].getColor());
                         }
                     }
-                    for(int j=0;j<M;j++)
-                        mapUnits[up][j].setState(false);
-                    up++;
-                }
-                else{
-                    i--;
+
                 }
             }
         }
-        return k;
+        return droppedCount;
     }
+    //Функция очищаем карту
     public void clear(){
         figure.timer.cancel();
-        for(int i=0;i<this.mapUnits.length;i++){
-            for(int j=0;j<mapUnits[i].length;j++){
-                mapUnits[i][j].setState(false);
+        for(int i=0;i<N;i++){
+            for(int j=0;j<M;j++){
+                mapUnits[i][j].setFilled(false);
             }
         }
     }

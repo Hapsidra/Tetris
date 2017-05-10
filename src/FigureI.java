@@ -48,7 +48,7 @@ public class FigureI extends Figure {
     }
 
     private void moveLeftV() {
-        if (j > 0 && !mapUnits[i][j - 1].getState() && !mapUnits[i + 1][j - 1].getState() && !mapUnits[i + 2][j - 1].getState() && !mapUnits[i + 3][j - 1].getState()) {
+        if (j > 0 && !mapUnits[i][j - 1].isFilled() && !mapUnits[i + 1][j - 1].isFilled() && !mapUnits[i + 2][j - 1].isFilled() && !mapUnits[i + 3][j - 1].isFilled()) {
             cubes[0].moveLeft();
             cubes[1].moveLeft();
             cubes[2].moveLeft();
@@ -58,7 +58,7 @@ public class FigureI extends Figure {
     }
 
     private void moveRightV() {
-        if (j < Map.M - 1 && !mapUnits[i][j + 1].getState() && !mapUnits[i + 1][j + 1].getState() && !mapUnits[i + 2][j + 1].getState() && !mapUnits[i + 3][j + 1].getState()) {
+        if (j < Map.M - 1 && !mapUnits[i][j + 1].isFilled() && !mapUnits[i + 1][j + 1].isFilled() && !mapUnits[i + 2][j + 1].isFilled() && !mapUnits[i + 3][j + 1].isFilled()) {
             cubes[1].moveRight();
             cubes[0].moveRight();
             cubes[3].moveRight();
@@ -68,7 +68,7 @@ public class FigureI extends Figure {
     }
 
     private void moveDownV() {
-        if (i != Map.N - heightV && !mapUnits[i + heightV][j].getState()) {
+        if (i != Map.N - heightV && !mapUnits[i + heightV][j].isFilled()) {
             i++;
             cubes[3].moveDown();
             cubes[2].moveDown();
@@ -81,7 +81,7 @@ public class FigureI extends Figure {
     }
 
     private void moveLeftH() {
-        if (j > 0 && !mapUnits[i][j - 1].getState()) {
+        if (j > 0 && !mapUnits[i][j - 1].isFilled()) {
             cubes[0].moveLeft();
             cubes[1].moveLeft();
             cubes[2].moveLeft();
@@ -91,7 +91,7 @@ public class FigureI extends Figure {
     }
 
     private void moveRightH() {
-        if (j < Map.M - widthH && !mapUnits[i][j + widthH].getState()) {
+        if (j < Map.M - widthH && !mapUnits[i][j + widthH].isFilled()) {
             cubes[3].moveRight();
             cubes[2].moveRight();
             cubes[1].moveRight();
@@ -101,7 +101,7 @@ public class FigureI extends Figure {
     }
 
     private void moveDownH() {
-        if (i != Map.N - heightH && !mapUnits[i + heightH][j].getState() && !mapUnits[i + heightH][j + 1].getState() && !mapUnits[i + heightH][j + 2].getState() && !mapUnits[i + heightH][j + 3].getState()) {
+        if (i != Map.N - heightH && !mapUnits[i + heightH][j].isFilled() && !mapUnits[i + heightH][j + 1].isFilled() && !mapUnits[i + heightH][j + 2].isFilled() && !mapUnits[i + heightH][j + 3].isFilled()) {
             i++;
             cubes[2].moveDown();
             cubes[3].moveDown();
@@ -117,7 +117,7 @@ public class FigureI extends Figure {
         if (isVertical) {//Смена на горизонтальный
             if (j == 0 || j > Map.M - 3)
                 return;
-            if (!mapUnits[i + 1][j - 1].getState() && !mapUnits[i + 1][j + 1].getState() && !mapUnits[i + 1][j + 2].getState()) {
+            if (!mapUnits[i + 1][j - 1].isFilled() && !mapUnits[i + 1][j + 1].isFilled() && !mapUnits[i + 1][j + 2].isFilled()) {
                 i = i + 1;
                 j = j - 1;
 
@@ -132,7 +132,7 @@ public class FigureI extends Figure {
             if (i > Map.N - 3 || i == 0) {
                 return;
             }
-            if (!mapUnits[i + 1][j + 1].getState() && !mapUnits[i + 2][j + 1].getState()) {
+            if (!mapUnits[i + 1][j + 1].isFilled() && !mapUnits[i + 2][j + 1].isFilled()) {
                 i = i - 1;
                 j = j + 1;
 

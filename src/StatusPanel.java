@@ -6,11 +6,11 @@ import java.util.Timer;
 /**
  * Created by hapsi on 26.08.2016.
  */
-public class InfoPanel extends JPanel {
+public class StatusPanel extends JPanel {
     private int level;
     private Timer levelTimer;
     private JLabel labelLevel,labelNext;
-    public InfoPanel(){
+    public StatusPanel(){
         setLayout(new BorderLayout());
         labelNext=new JLabel("Next");
         level=1;
@@ -21,12 +21,12 @@ public class InfoPanel extends JPanel {
         levelTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(level!=9) {
-                    level++;
-                    labelLevel.setText("Level: "+Integer.toString(level));
-                }
-                else
+                if(level==9) {
                     levelTimer.cancel();
+                    return;
+                }
+                level++;
+                labelLevel.setText("Level: "+Integer.toString(level));
             }
         },1000*90,1000*90);
         add(labelNext,BorderLayout.EAST);
