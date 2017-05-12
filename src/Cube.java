@@ -3,37 +3,27 @@
  */
 public class Cube {
     private int y, x;
-    private MapUnit mapUnits[][];
-    public Cube(MapUnit mapUnits[][], int y, int x) {
-        this.mapUnits=mapUnits;
+    public Cube(int y, int x) {
         this.y = y;
         this.x = x;
-        mapUnits[y][x].setFilled(true);
+    }
+    public Cube(int []coordinates){
+        this(coordinates[0],coordinates[1]);
     }
 
-    public void moveLeft() {
-        mapUnits[y][x].setFilled(false);
-        x--;
-        mapUnits[y][x].setFilled(true);
+    public int getY() {
+        return y;
     }
 
-    public void moveDown() {
-        mapUnits[y][x].setFilled(false);
-        y++;
-        mapUnits[y][x].setFilled(true);
+    public void setY(int y) {
+        this.y = y;
     }
 
-    public void moveRight() {
-        mapUnits[y][x].setFilled(false);
-        x++;
-        mapUnits[y][x].setFilled(true);
+    public int getX() {
+        return x;
     }
-    public void moveToIJ(int i, int j){
-        if(!(this.y ==i && this.x ==j)) {
-            mapUnits[this.y][this.x].setFilled(false);
-            this.y = i;
-            this.x = j;
-            mapUnits[i][j].setFilled(true);
-        }
+
+    public void setX(int x) {
+        this.x = x;
     }
 }

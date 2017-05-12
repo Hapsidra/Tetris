@@ -9,12 +9,12 @@ import java.awt.event.ActionListener;
 
 public class Main implements ActionListener {
     private ScorePanel scorePanel;
-    private StatusPanel infoPanel;
+    private Info infoPanel;
     private Map map;
     private GameOverDialog gameOver;
     public Main(){
         JFrame jFrame =new JFrame("Tetris");
-        jFrame.setSize(350,600);
+        jFrame.setSize(400,800);
         jFrame.setResizable(false);
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -37,12 +37,12 @@ public class Main implements ActionListener {
         ////////////////////////////////
 
         ////Панель информации/////////////////
-        infoPanel=new StatusPanel();
+        infoPanel=new Info();
         jFrame.add(infoPanel,BorderLayout.NORTH);
         //////////////////////////////////
 
         ////Карта///////////
-        map=new Map(scorePanel,infoPanel,this);
+        map=new Map(this);
         jFrame.add(map);
         map.repaint();
         map.setFocusable(true);
@@ -54,8 +54,8 @@ public class Main implements ActionListener {
             System.exit(0);
         else if(e.getActionCommand().equals("Restart")){
             scorePanel.setScore(0);
-            map.clear();
-            map.addNext();
+            map.clearLines();
+            map.next();
         }
     }
     public void gameOver(){
@@ -70,5 +70,12 @@ public class Main implements ActionListener {
                 new Main();
             }
         });
+    }
+
+    public ScorePanel getScorePanel() {
+        return scorePanel;
+    }
+    public Info getInfoPanel(){
+        return infoPanel;
     }
 }

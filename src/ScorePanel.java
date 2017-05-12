@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -17,7 +18,12 @@ public class ScorePanel extends JPanel{
             Scanner scanner = new Scanner(new File("data.txt"));
             highScore =scanner.nextInt();
             scanner.close();
-        }catch (FileNotFoundException e){}
+        }catch (FileNotFoundException e){
+
+        }
+        catch (NoSuchElementException e){
+            highScore=0;
+        }
 
         score = 0;
         labelScore=new JLabel("Score: 0");

@@ -53,8 +53,8 @@ public class GameOverDialog extends JDialog implements ActionListener{
             if(scorePanel.getScore()>scorePanel.getHighScore())
                 scorePanel.setHighScore(scorePanel.getScore());
             scorePanel.setScore(0);
-            map.clear();
-            map.addNext();
+            map.clearLines();
+            map.next();
             this.hide();
         }
         else{

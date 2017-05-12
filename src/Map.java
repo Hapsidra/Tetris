@@ -1,11 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by hapsi on 13.06.2016.
@@ -15,13 +12,9 @@ public class Map extends JPanel {
     private MapUnit mapUnits[][]= new MapUnit[N][M];
     private Figure figure;
     private int nextFigure;
-    private ScorePanel scorePanel;
-    private StatusPanel infoPanel;
-    private Random random;
     private Main main;
-    public Map(ScorePanel scorePanel, StatusPanel infoPanel, Main main) {
-        this.scorePanel = scorePanel;
-        this.infoPanel = infoPanel;
+    private Random random;
+    public Map(Main main) {
         this.main=main;
         setLayout(new GridLayout(N, M));
         for (int i = 0; i < N; i++) {
@@ -36,11 +29,11 @@ public class Map extends JPanel {
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    figure.moveLeft();
+                    figure.move(Figure.TO_LEFT);
                 } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    figure.moveRight();
+                    figure.move(Figure.TO_RIGHT);
                 } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    figure.moveDown();
+                    figure.move(Figure.TO_DOWN);
                 } else if (e.getKeyCode() == KeyEvent.VK_UP) {
                     figure.setOrientation();
                 }
@@ -48,184 +41,30 @@ public class Map extends JPanel {
         });
         random=new Random();
         nextFigure = random.nextInt(Figure.FIGURES_COUNT);
-        addNext();
+        next();
     }
 
+    public MapUnit[][]getMapUnits(){
+        return mapUnits;
+    }
+
+    public void next() {
+        //Обновляем счет
+        main.getScorePanel().setScore(main.getScorePanel().getScore()+computeScore(dropLines()));
+
+        //Добавляем фигуру
+        figure=new Figure(this,nextFigure);
+
+        //Обновляем информацию
+        nextFigure = random.nextInt(Figure.FIGURES_COUNT);
+        main.getInfoPanel().updateNext(nextFigure);
+    }
+
+    //Вычисляем счет который надо прибавить на основе опущенных строк
     public int computeScore(int droppedCount){
         if(droppedCount==0)
             return 0;
         return computeScore(droppedCount-1)*2+100;
-    }
-
-    public void addNext() {
-        scorePanel.setScore(scorePanel.getScore()+computeScore(dropLines()));
-
-        int figureStartI=0,figureStartJ=4;
-        if (nextFigure == Figure.O) {
-            if(mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()){
-                main.gameOver();
-            }
-            else
-                figure = new Figure0(this,mapUnits, infoPanel.getLevel());
-        } else if (nextFigure == Figure.I) {
-            boolean orient = random.nextBoolean();
-            if (orient) {
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 2][figureStartJ].isFilled() || mapUnits[figureStartI + 3][figureStartJ].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureI(this,mapUnits, orient, infoPanel.getLevel());
-            } else {
-                figureStartJ = 3;
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI][figureStartJ + 3].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureI(this,mapUnits, orient, infoPanel.getLevel());
-            }
-        }
-        else if (nextFigure == Figure.LR) {
-            int  orient = random.nextInt(4);
-
-            //Проверка на умещаемость
-            if (orient == 0) {
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 2][figureStartJ].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLR(this,mapUnits, orient, infoPanel.getLevel());
-            } else if (orient == 1) {
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 2].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLR(this,mapUnits, orient, infoPanel.getLevel());
-            } else if (orient == 2) {
-                if (mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 2][figureStartJ].isFilled() || mapUnits[figureStartI + 2][figureStartJ + 1].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLR(this,mapUnits, orient, infoPanel.getLevel());
-            } else if (orient == 3) {
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 2].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLR(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            //Проверка на умещаемость
-
-        }
-        else if (nextFigure == Figure.LL) {
-            int  orient = random.nextInt(4);
-            //Проверка на умещаемость
-            if (orient == 0) {
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 2][figureStartJ + 1].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLL(this,mapUnits, orient, infoPanel.getLevel());
-            } else if (orient == 1) {
-                if (mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 1].isFilled() || mapUnits[figureStartI + 1][figureStartJ + 2].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLL(this,mapUnits, orient, infoPanel.getLevel());
-            } else if (orient == 2) {
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI][figureStartJ + 3].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLL(this,mapUnits, orient, infoPanel.getLevel());
-            } else if (orient == 3) {
-                if (mapUnits[figureStartI][figureStartJ].isFilled() || mapUnits[figureStartI][figureStartJ + 1].isFilled() || mapUnits[figureStartI][figureStartJ + 2].isFilled() || mapUnits[figureStartI + 1][figureStartJ].isFilled()) {
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureLL(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            //Проверка на умещаемость
-
-        }
-        else if (nextFigure == Figure.T) {
-            int  orient = random.nextInt(4);
-
-            //Проверка на умещаемость
-            if(orient==0) {
-                if(mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+2][figureStartJ+1].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureT(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            else if(orient ==1){
-                if(mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+2].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureT(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            else if(orient ==2){
-                if(mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+2][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureT(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            else if(orient ==3){
-                if(mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI][figureStartJ+2].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureT(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            //Проверка на умещаемость
-
-        }
-        else if (nextFigure == Figure.SL) {
-            int  orient = random.nextInt(2);
-
-            ////Проверка на умещаемость
-            if(orient==0) {
-                if(mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+2][figureStartJ].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureSL(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            else if(orient ==1){
-                if(mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ+2].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureSL(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            ////////////////////////////
-
-        }
-        else if (nextFigure == Figure.SR) {
-            int  orient = random.nextInt(2);
-
-            ////Проверка на умещаемость
-            if(orient==0) {
-                if(mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI+2][figureStartJ+1].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureSR(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            else if(orient ==1){
-                if(mapUnits[figureStartI][figureStartJ+1].isFilled()||mapUnits[figureStartI+1][figureStartJ].isFilled()||mapUnits[figureStartI+1][figureStartJ+1].isFilled()||mapUnits[figureStartI][figureStartJ+2].isFilled()){
-                    main.gameOver();
-                }
-                else
-                    figure = new FigureSR(this,mapUnits, orient, infoPanel.getLevel());
-            }
-            ////////////////////////////
-        }
-
-        nextFigure = random.nextInt(Figure.FIGURES_COUNT);
-        infoPanel.updateNext(nextFigure);
     }
 
     //Функция убирает заполненные строки и возвращает кол-во убранных строк
@@ -257,14 +96,14 @@ public class Map extends JPanel {
         }
         return droppedCount;
     }
+
     //Функция очищаем карту
-    public void clear(){
-        figure.timer.cancel();
+    public void clearLines(){
+        figure.stop();
         for(int i=0;i<N;i++){
             for(int j=0;j<M;j++){
                 mapUnits[i][j].setFilled(false);
             }
         }
     }
-
 }
