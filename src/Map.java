@@ -249,7 +249,6 @@ public class Map extends JPanel {
                             mapUnits[drop][j].setFilled(false);
                         } else {
                             mapUnits[drop][j].setFilled(mapUnits[drop-1][j].isFilled());
-                            mapUnits[drop][j].setColor(mapUnits[drop-1][j].getColor());
                         }
                     }
 

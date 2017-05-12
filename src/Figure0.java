@@ -10,10 +10,10 @@ public class Figure0 extends Figure{
     public Figure0(Map m,MapUnit mapUnits[][],int speed){
         super(m,mapUnits,speed);
 
-        cubes[0]=new Cube(mapUnits,i,j, color);
-        cubes[1]=new Cube(mapUnits,i,j+1,color);
-        cubes[2]=new Cube(mapUnits,i+1,j,color);
-        cubes[3]=new Cube(mapUnits,i+1,j+1,color);
+        cubes[0]=new Cube(mapUnits,i,j);
+        cubes[1]=new Cube(mapUnits,i,j+1);
+        cubes[2]=new Cube(mapUnits,i+1,j);
+        cubes[3]=new Cube(mapUnits,i+1,j+1);
     }
     public void moveLeft(){
         if(j>0 && !mapUnits[i][j-1].isFilled()&& !mapUnits[i+1][j-1].isFilled()) {

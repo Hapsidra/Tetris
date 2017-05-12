@@ -5,32 +5,31 @@ import java.awt.*;
  */
 public class FigureLL extends Figure {
     private int position;
-    private static final Color color = new Color(86, 122, 157);
 
     public FigureLL(Map m, MapUnit mapUnits[][], int pos, int speed) {
         super(m, mapUnits, speed);
 
 
         if (pos == 0) {
-            cubes[0] = new Cube(mapUnits, i, j, color);
-            cubes[1] = new Cube(mapUnits, i, j + 1, color);
-            cubes[2] = new Cube(mapUnits, i + 1, j + 1, color);
-            cubes[3] = new Cube(mapUnits, i + 2, j + 1, color);
+            cubes[0] = new Cube(mapUnits, i, j);
+            cubes[1] = new Cube(mapUnits, i, j + 1);
+            cubes[2] = new Cube(mapUnits, i + 1, j + 1);
+            cubes[3] = new Cube(mapUnits, i + 2, j + 1);
         } else if (pos == 1) {
-            cubes[0] = new Cube(mapUnits, i, j + 2, color);
-            cubes[1] = new Cube(mapUnits, i + 1, j, color);
-            cubes[2] = new Cube(mapUnits, i + 1, j + 1, color);
-            cubes[3] = new Cube(mapUnits, i + 1, j + 2, color);
+            cubes[0] = new Cube(mapUnits, i, j + 2);
+            cubes[1] = new Cube(mapUnits, i + 1, j);
+            cubes[2] = new Cube(mapUnits, i + 1, j + 1);
+            cubes[3] = new Cube(mapUnits, i + 1, j + 2);
         } else if (pos == 2) {
-            cubes[0] = new Cube(mapUnits, i, j, color);
-            cubes[1] = new Cube(mapUnits, i + 1, j, color);
-            cubes[2] = new Cube(mapUnits, i + 2, j, color);
-            cubes[3] = new Cube(mapUnits, i + 2, j + 1, color);
+            cubes[0] = new Cube(mapUnits, i, j);
+            cubes[1] = new Cube(mapUnits, i + 1, j);
+            cubes[2] = new Cube(mapUnits, i + 2, j);
+            cubes[3] = new Cube(mapUnits, i + 2, j + 1);
         } else if (pos == 3) {
-            cubes[0] = new Cube(mapUnits, i, j, color);
-            cubes[1] = new Cube(mapUnits, i, j + 1, color);
-            cubes[2] = new Cube(mapUnits, i, j + 2, color);
-            cubes[3] = new Cube(mapUnits, i + 1, j, color);
+            cubes[0] = new Cube(mapUnits, i, j);
+            cubes[1] = new Cube(mapUnits, i, j + 1);
+            cubes[2] = new Cube(mapUnits, i, j + 2);
+            cubes[3] = new Cube(mapUnits, i + 1, j);
         }
         position = pos;
     }

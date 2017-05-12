@@ -6,18 +6,12 @@ import java.awt.*;
  */
 public class MapUnit extends JPanel {
     private boolean filled;
-    private Color color;
-    private static Color emptyColor=Color.BLACK,borderColor=new Color(50, 74, 92);
+    private static final Color  EMPTY_COLOR = Color.BLACK,
+                                FILLED_COLOR = Color.WHITE,
+                                BORDER_COLOR = new Color(50, 74, 92);
     public MapUnit(){
-        setBorder(BorderFactory.createLineBorder(borderColor));
+        setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         filled =false;
-    }
-    public void setColor(Color c){
-        color=c;
-        repaint();
-    }
-    public Color getColor(){
-        return  color;
     }
     public void setFilled(boolean filled){
         this.filled = filled;
@@ -28,12 +22,11 @@ public class MapUnit extends JPanel {
     }
     public void paintComponent(Graphics g){
         if(filled){
-            g.setColor(color);
-            g.fillRect(0,0,getWidth(),getHeight());
+            g.setColor(FILLED_COLOR);
         }
         else {
-            g.setColor(emptyColor);
-            g.fillRect(0,0,getWidth(),getHeight());
+            g.setColor(EMPTY_COLOR);
         }
+        g.fillRect(0,0,getWidth(),getHeight());
     }
 }

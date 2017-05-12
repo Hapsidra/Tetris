@@ -10,16 +10,16 @@ public class FigureSL extends Figure{
         super(map,mu, speed);
 
         if(pos==0) {
-            cubes[0] = new Cube(mapUnits, i+1, j,color);
-            cubes[1] = new Cube(mapUnits, i , j+1,color);
-            cubes[2] = new Cube(mapUnits, i + 1, j+1,color);
-            cubes[3] = new Cube(mapUnits, i + 2, j,color);
+            cubes[0] = new Cube(mapUnits, i+1, j);
+            cubes[1] = new Cube(mapUnits, i , j+1);
+            cubes[2] = new Cube(mapUnits, i + 1, j+1);
+            cubes[3] = new Cube(mapUnits, i + 2, j);
         }
         else if(pos==1){
-            cubes[0] = new Cube(mapUnits, i, j+1,color);
-            cubes[1] = new Cube(mapUnits, i, j,color);
-            cubes[2] = new Cube(mapUnits, i+1, j+1,color);
-            cubes[3] = new Cube(mapUnits, i+1, j+2,color);
+            cubes[0] = new Cube(mapUnits, i, j+1);
+            cubes[1] = new Cube(mapUnits, i, j);
+            cubes[2] = new Cube(mapUnits, i+1, j+1);
+            cubes[3] = new Cube(mapUnits, i+1, j+2);
         }
         position=pos;
     }

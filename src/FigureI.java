@@ -7,21 +7,20 @@ public class FigureI extends Figure {
     private int widthH = 4, heightH = 1;
     private int heightV = 4;
     private boolean isVertical;
-    private static final Color color = new Color(228, 157, 184);
 
     public FigureI(Map m, MapUnit mapUnits[][], boolean pos, int speed) {
         super(m, mapUnits, speed);
         if (pos == true) {
-            cubes[0] = new Cube(mapUnits, i, j, color);
-            cubes[1] = new Cube(mapUnits, i + 1, j, color);
-            cubes[2] = new Cube(mapUnits, i + 2, j, color);
-            cubes[3] = new Cube(mapUnits, i + 3, j, color);
+            cubes[0] = new Cube(mapUnits, i, j);
+            cubes[1] = new Cube(mapUnits, i + 1, j);
+            cubes[2] = new Cube(mapUnits, i + 2, j);
+            cubes[3] = new Cube(mapUnits, i + 3, j);
         } else {
             j = 3;
-            cubes[0] = new Cube(mapUnits, i, j, color);
-            cubes[1] = new Cube(mapUnits, i, j + 1, color);
-            cubes[2] = new Cube(mapUnits, i, j + 2, color);
-            cubes[3] = new Cube(mapUnits, i, j + 3, color);
+            cubes[0] = new Cube(mapUnits, i, j);
+            cubes[1] = new Cube(mapUnits, i, j + 1);
+            cubes[2] = new Cube(mapUnits, i, j + 2);
+            cubes[3] = new Cube(mapUnits, i, j + 3);
         }
         isVertical = pos;
     }
