@@ -52,7 +52,7 @@ public class Map extends JPanel {
     private void generateNext(){
         nextFigure = random.nextInt(Figure.FIGURES.length);
         nextOrientation=random.nextInt(Figure.FIGURES[nextFigure].length);
-        main.getInfoPanel().updateNext(nextFigure);
+        main.getInfoPanel().updateNext(nextFigure,nextOrientation);
     }
 
     public void next() {

@@ -12,7 +12,7 @@ public class InfoPanel extends JPanel {
     private JLabel labelLevel,labelNext;
     public InfoPanel(){
         setLayout(new BorderLayout());
-        labelNext=new JLabel("Next");
+        labelNext=new JLabel("Next:");
         level=1;
         labelLevel=new JLabel("Level: 1");
         add(labelLevel,BorderLayout.WEST);
@@ -30,27 +30,31 @@ public class InfoPanel extends JPanel {
             }
         },1000*90,1000*90);
         add(labelNext,BorderLayout.EAST);
+        labelNext.setHorizontalTextPosition(SwingConstants.LEFT);
+        labelNext.setMaximumSize(new Dimension(58,26));
+        labelNext.setPreferredSize(new Dimension(58,26));
+        labelNext.setMinimumSize(new Dimension(58,26));
     }
-    public void updateNext(int n){
-        if (n == Figure.O) {
-            labelNext.setIcon(new ImageIcon("img/o.png"));
-        } else if (n == Figure.I) {
-            labelNext.setIcon(new ImageIcon("img/i.png"));
+    public void updateNext(int figure,int orientation){
+        if (figure == Figure.O) {
+            labelNext.setIcon(new ImageIcon("img/O"+(orientation+1)+".png"));
+        } else if (figure == Figure.I) {
+            labelNext.setIcon(new ImageIcon("img/I"+(orientation+1)+".png"));
         }
-        else if (n == Figure.LR) {
-            labelNext.setIcon(new ImageIcon("img/lr.png"));
+        else if (figure == Figure.LR) {
+            labelNext.setIcon(new ImageIcon("img/LR"+(orientation+1)+".png"));
         }
-        else if (n == Figure.LL) {
-            labelNext.setIcon(new ImageIcon("img/ll.png"));
+        else if (figure == Figure.LL) {
+            labelNext.setIcon(new ImageIcon("img/LL"+(orientation+1)+".png"));
         }
-        else if (n == Figure.T) {
-            labelNext.setIcon(new ImageIcon("img/t.png"));
+        else if (figure == Figure.T) {
+            labelNext.setIcon(new ImageIcon("img/T"+(orientation+1)+".png"));
         }
-        else if (n == Figure.SL) {
-            labelNext.setIcon(new ImageIcon("img/sl.png"));
+        else if (figure == Figure.SL) {
+            labelNext.setIcon(new ImageIcon("img/SL"+(orientation+1)+".png"));
         }
-        else if (n == Figure.SR) {
-            labelNext.setIcon(new ImageIcon("img/sr.png"));
+        else if (figure == Figure.SR) {
+            labelNext.setIcon(new ImageIcon("img/SR"+(orientation+1)+".png"));
         }
     }
     public int getLevel(){
