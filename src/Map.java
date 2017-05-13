@@ -40,7 +40,7 @@ public class Map extends JPanel {
             }
         });
         random=new Random();
-        nextFigure = random.nextInt(Figure.FIGURES_COUNT);
+        nextFigure = random.nextInt(Figure.FIGURES.length);
         next();
     }
 
@@ -56,7 +56,7 @@ public class Map extends JPanel {
         figure=new Figure(this,nextFigure);
 
         //Обновляем информацию
-        nextFigure = random.nextInt(Figure.FIGURES_COUNT);
+        nextFigure = random.nextInt(Figure.FIGURES.length);
         main.getInfoPanel().updateNext(nextFigure);
     }
 
