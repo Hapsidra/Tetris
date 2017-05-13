@@ -28,7 +28,7 @@ public class InfoPanel extends JPanel {
                 level++;
                 labelLevel.setText("Level: "+Integer.toString(level));
             }
-        },1000*90,1000*90);
+        },1000*75,1000*75);
         add(labelNext,BorderLayout.EAST);
         labelNext.setHorizontalTextPosition(SwingConstants.LEFT);
         labelNext.setMaximumSize(new Dimension(58,26));

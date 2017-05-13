@@ -169,7 +169,7 @@ public class Figure {
             public void run() {
                     move(TO_DOWN);
             }
-        },1500-(level*100),1500-(level*100));
+        },1300-(level*100),1300-(level*100));
     }
 
     public Cube[] getCubes() {
