@@ -21,7 +21,7 @@ public class Info extends JPanel {
         levelTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(level==9) {
+                if(level==10) {
                     levelTimer.cancel();
                     return;
                 }

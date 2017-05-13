@@ -53,7 +53,7 @@ public class Map extends JPanel {
         main.getScorePanel().setScore(main.getScorePanel().getScore()+computeScore(dropLines()));
 
         //Добавляем фигуру
-        figure=new Figure(this,nextFigure);
+        figure=new Figure(this,nextFigure,main.getInfoPanel().getLevel());
 
         //Обновляем информацию
         nextFigure = random.nextInt(Figure.FIGURES.length);

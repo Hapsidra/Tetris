@@ -155,7 +155,7 @@ public class Figure {
     private int figure;
     private int orientation;
 
-    public Figure(Map map,int figure){
+    public Figure(Map map,int figure,int level){
         this.map=map;
         this.figure=figure;
         this.orientation=0;
@@ -167,7 +167,7 @@ public class Figure {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                    //move(TO_DOWN);
+                    move(TO_DOWN);
             }
         },1000,1000);
 
@@ -262,16 +262,44 @@ public class Figure {
             map.next();
         }
     }
-    public void setOrientation(){
-        enable(false);
-        int offsetY=cubes[0].getY() -FIGURES[figure][orientation][0][0];
-        int offsetX=cubes[0].getX()-FIGURES[figure][orientation][0][1];
-        orientation=orientation==FIGURES[figure].length-1?0:orientation+1;
-        for(int i=0;i<4;i++) {
-            cubes[i].setY(offsetY+FIGURES[figure][orientation][i][0]);
-            cubes[i].setX(offsetX+FIGURES[figure][orientation][i][1]);
+    private boolean canSetOrientation(){
+        int offsetY = cubes[0].getY() - FIGURES[figure][orientation][0][0];
+        int offsetX = cubes[0].getX() - FIGURES[figure][orientation][0][1];
+        int nextOrientation=orientation==FIGURES[figure].length-1?0:orientation+1;
+        Cube nextCubes[]=new Cube[4];
+        for (int i = 0; i < 4; i++) {
+            nextCubes[i]=new Cube(offsetY+FIGURES[figure][nextOrientation][i][0],offsetX+FIGURES[figure][nextOrientation][i][1]);
         }
-        enable(true);
+        MapUnit [][]mapUnits=map.getMapUnits();
+        for(Cube next:nextCubes){
+            boolean needCheck=true;
+            for(Cube current:cubes){
+                if(next.getX()==current.getX() && next.getY()==current.getY()){
+                    needCheck=false;
+                    break;
+                }
+            }
+            if(needCheck){
+                try {
+                    if (next.getX() < 0 || next.getX() >= Map.M || next.getY() >= Map.N || mapUnits[next.getY()][next.getX()].isFilled())
+                        return false;
+                }catch (ArrayIndexOutOfBoundsException e){}
+            }
+        }
+        return true;
+    }
+    public void setOrientation(){
+        if(canSetOrientation()) {
+            enable(false);
+            int offsetY = cubes[0].getY() - FIGURES[figure][orientation][0][0];
+            int offsetX = cubes[0].getX() - FIGURES[figure][orientation][0][1];
+            orientation = orientation == FIGURES[figure].length - 1 ? 0 : orientation + 1;
+            for (int i = 0; i < 4; i++) {
+                cubes[i].setY(offsetY + FIGURES[figure][orientation][i][0]);
+                cubes[i].setX(offsetX + FIGURES[figure][orientation][i][1]);
+            }
+            enable(true);
+        }
     }
     public void stop(){
         timer.cancel();
