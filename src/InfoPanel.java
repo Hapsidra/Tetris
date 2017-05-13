@@ -6,11 +6,11 @@ import java.util.Timer;
 /**
  * Created by hapsi on 26.08.2016.
  */
-public class Info extends JPanel {
+public class InfoPanel extends JPanel {
     private int level;
     private Timer levelTimer;
     private JLabel labelLevel,labelNext;
-    public Info(){
+    public InfoPanel(){
         setLayout(new BorderLayout());
         labelNext=new JLabel("Next");
         level=1;

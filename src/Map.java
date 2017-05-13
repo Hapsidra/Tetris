@@ -12,6 +12,7 @@ public class Map extends JPanel {
     private MapUnit mapUnits[][]= new MapUnit[N][M];
     private Figure figure;
     private int nextFigure;
+    private int nextOrientation;
     private Main main;
     private Random random;
     public Map(Main main) {
@@ -40,7 +41,7 @@ public class Map extends JPanel {
             }
         });
         random=new Random();
-        nextFigure = random.nextInt(Figure.FIGURES.length);
+        generateNext();
         next();
     }
 
@@ -48,16 +49,38 @@ public class Map extends JPanel {
         return mapUnits;
     }
 
+    private void generateNext(){
+        nextFigure = random.nextInt(Figure.FIGURES.length);
+        nextOrientation=random.nextInt(Figure.FIGURES[nextFigure].length);
+        main.getInfoPanel().updateNext(nextFigure);
+    }
+
     public void next() {
         //Обновляем счет
         main.getScorePanel().setScore(main.getScorePanel().getScore()+computeScore(dropLines()));
 
         //Добавляем фигуру
-        figure=new Figure(this,nextFigure,main.getInfoPanel().getLevel());
+        if(canCreateFigure())
+            figure=new Figure(this,nextFigure,nextOrientation,main.getInfoPanel().getLevel());
+        else
+            main.gameOver();
 
         //Обновляем информацию
-        nextFigure = random.nextInt(Figure.FIGURES.length);
-        main.getInfoPanel().updateNext(nextFigure);
+        generateNext();
+    }
+
+    private boolean canCreateFigure(){
+        Cube []cubes=new Cube[4];
+        for(int i=0;i<4;i++){
+            cubes[i]=new Cube(Figure.FIGURES[nextFigure][nextOrientation][i]);
+        }
+        for(Cube cube:cubes){
+            try {
+                if (mapUnits[cube.getY()][cube.getX()].isFilled())
+                    return false;
+            }catch (ArrayIndexOutOfBoundsException e){}
+        }
+        return true;
     }
 
     //Вычисляем счет который надо прибавить на основе опущенных строк

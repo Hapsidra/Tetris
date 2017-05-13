@@ -155,12 +155,12 @@ public class Figure {
     private int figure;
     private int orientation;
 
-    public Figure(Map map,int figure,int level){
+    public Figure(Map map,int figure,int orientation,int level){
         this.map=map;
         this.figure=figure;
-        this.orientation=0;
+        this.orientation=orientation;
         for(int i=0;i<4;i++){
-            cubes[i]=new Cube(FIGURES[figure][0][i]);
+            cubes[i]=new Cube(FIGURES[figure][orientation][i]);
         }
         enable(true);
         timer=new Timer();
@@ -169,8 +169,7 @@ public class Figure {
             public void run() {
                     move(TO_DOWN);
             }
-        },1000,1000);
-
+        },1500-(level*100),1500-(level*100));
     }
 
     public Cube[] getCubes() {

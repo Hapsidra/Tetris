@@ -9,9 +9,9 @@ import java.awt.event.ActionListener;
 
 public class Main implements ActionListener {
     private ScorePanel scorePanel;
-    private Info infoPanel;
+    private InfoPanel infoPanel;
     private Map map;
-    private GameOverDialog gameOver;
+    private EndDialog gameOver;
     public Main(){
         JFrame jFrame =new JFrame("Tetris");
         jFrame.setSize(400,800);
@@ -37,7 +37,7 @@ public class Main implements ActionListener {
         ////////////////////////////////
 
         ////Панель информации/////////////////
-        infoPanel=new Info();
+        infoPanel=new InfoPanel();
         jFrame.add(infoPanel,BorderLayout.NORTH);
         //////////////////////////////////
 
@@ -53,14 +53,17 @@ public class Main implements ActionListener {
         if(e.getActionCommand().equals("Exit"))
             System.exit(0);
         else if(e.getActionCommand().equals("Restart")){
-            scorePanel.setScore(0);
-            map.clearLines();
-            map.next();
+            restart();
         }
+    }
+    public void restart(){
+        scorePanel.setScore(0);
+        map.clearLines();
+        map.next();
     }
     public void gameOver(){
         if(gameOver==null)
-            gameOver=new GameOverDialog(scorePanel,map);
+            gameOver=new EndDialog(this);
         gameOver.show();
     }
     public static void main(String args[]){
@@ -75,7 +78,7 @@ public class Main implements ActionListener {
     public ScorePanel getScorePanel() {
         return scorePanel;
     }
-    public Info getInfoPanel(){
+    public InfoPanel getInfoPanel(){
         return infoPanel;
     }
 }
